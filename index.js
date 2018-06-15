@@ -105,6 +105,7 @@ function handleDeleteItemClicked() {
 }
 //new Searchbar for updated funtionality
 function generateListFormHtml() {
+  console.log('Generating list form');
   return `<label for="shopping-list-entry">Add an item</label>
   <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
   <button type="submit">Add item</button><br/>
@@ -115,12 +116,36 @@ function generateListFormHtml() {
   <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
 }
 function renderListForm() {
+  console.log('Rendering list form');
   $('#js-shopping-list-form').html(generateListFormHtml());
+}
+
+function generateCheckedList(shoppingList) {
+  console.log('Generating filtered shopping list element');
+  const filteredItems = shoppingList.filter(item => item.checked);
+  const filteredItemsString = generateShoppingItemsString(filteredItems);
+  //console.log(filteredItemsString);
+  return filteredItemsString;
+}
+
+function renderFilteredShoppingList() {
+  // render the filtered shopping list in the DOM
+  console.log('`renderFilteredShoppingList` ran');
+  const filteredShoppingListItemsString = generateCheckedList(STORE.items);
+  // insert that HTML into the DOM
+  $('.js-shopping-list').html(filteredShoppingListItemsString);
 }
 
 // User can press a switch/checkbox to toggle between displaying all items or displaying only items that are unchecked
 function handleCheckboxChecked() {
-  //$('#js-shopping-list-form').html(generateCheckboxHtml());
+  $('.js-shopping-list-checkbox').change(function(event) {
+    console.log('`handleCheckboxChecked` ran');
+    if ($(event.currentTarget).is(':checked')) {
+      renderFilteredShoppingList();
+    }else {
+      renderShoppingList();
+    }
+  });
 }
 
 // User can type in a search term and the displayed list will be filtered by item names only containing that search term
@@ -146,7 +171,6 @@ function handleShoppingList() {
   handleCheckboxChecked();
   handleSearchTextbox();
   handleItemEdit();
-  
 }
 
 // when the page loads, call `handleShoppingList`
