@@ -13,18 +13,24 @@ const STORE = {
 function generateListFormHtml() {
   console.log('Generating list form');
   return `
-  <label for="shopping-list-entry">Add an item</label>
+  <form id="js-shopping-list-form-entry">
+    <label for="shopping-list-entry">Add an item</label>
     <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
-  <button type="submit">Add item</button><br/>
-  <label for="shopping-list-search">Search</label>
+    <button type="submit">Add item</button>
+  </form>
+  <form id="js-shopping-list-form-search">
+    <label for="shopping-list-search">Search</label>
     <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="Search">
-  <button type="submit">Search</button>
+    <button type="submit">Search</button>
+  </form>
+  <form id="js-shopping-list-form-checkbox">
   <label for="shopping-list-checkbox">Show Only Checked</label>
-    <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
+    <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">
+  </form>`;
 }
 function renderListForm() {
   console.log('Rendering list form');
-  $('#js-shopping-list-form').html(generateListFormHtml());
+  $('.js-shopping-list-form').html(generateListFormHtml());
 }
 
 function generateItemElement(item, itemIndex) {
@@ -72,7 +78,7 @@ function addItemToShoppingList(itemName) {
 }
 
 function handleNewItemSubmit() {
-  $('#js-shopping-list-form').submit(function (event) {
+  $('#js-shopping-list-form-entry').submit(function (event) {
     event.preventDefault();
     console.log('`handleNewItemSubmit` ran');
     const newItemName = $('.js-shopping-list-entry').val();
@@ -149,21 +155,31 @@ function handleCheckboxChecked() {
     }
   });
 }
-// Function to search through STORE.items for something with same .name and return an array to be initalized
-function storeSearch(name) {
-  return STORE.items.filter(itemName => itemName.name.toLowerCase().includes(name.toLowerCase()));
+function renderSearchShoppingList(searchName) {
+  // render the search shopping list in the DOM
+  console.log('`renderSearchShoppingList` ran');
+  const searchShoppingListItemsString = generateSearchList(searchName);
+  // insert that HTML into the DOM
+  $('.js-shopping-list').html(searchShoppingListItemsString);
 }
-
+// Function to search through STORE.items for something with same .name and return an array to be initalized
+function generateSearchList(searchName) {
+  console.log(`looking for ${searchName}`);
+  const searchList = STORE.items.filter(itemName => itemName.name.toLowerCase().includes(searchName.toLowerCase()));
+  const searchListString = generateShoppingItemsString(searchList);
+  return searchListString;
+}
+// function to turn search array to html
 // User can type in a search term and the displayed list will be filtered by item names only containing that search term
 function handleSearchTextbox() {
-  //$('#js-shopping-list-form').submit(function (event) {
-  // event.preventDefault();
-  // console.log('`handleSearchTextbox` ran');
-  // const newItemName = $('.js-shopping-list-search').val();
-  // $('.js-shopping-list-search').val('');
-  // addItemToShoppingList(newItemName);
-  // renderShoppingList();
-  // });
+  $('#js-shopping-list-form-search').submit(function (event) {
+    event.preventDefault();
+    console.log('`handleSearchTextbox` ran');
+    console.log($('.js-shopping-list-search').val());
+    const searchItemName = $('.js-shopping-list-search').val();
+    $('.js-shopping-list-search').val('');
+    renderSearchShoppingList(searchItemName);
+  });
 }
 
 // Function to change the value of name in object
