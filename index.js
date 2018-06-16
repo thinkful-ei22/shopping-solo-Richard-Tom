@@ -20,6 +20,10 @@ function generateItemElement(item, itemIndex) {
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
         </button>
+        <button class="shopping-item-edit js-item-edit">
+          <span class="button-label">edit</span>
+        </button>
+        <input type="text" name="edit-text-box" class="edit-text-box ${itemIndex}">
       </div>
     </li>`;
 }
@@ -106,14 +110,15 @@ function handleDeleteItemClicked() {
 //new Searchbar for updated funtionality
 function generateListFormHtml() {
   console.log('Generating list form');
-  return `<label for="shopping-list-entry">Add an item</label>
-  <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+  return `
+  <label for="shopping-list-entry">Add an item</label>
+    <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
   <button type="submit">Add item</button><br/>
   <label for="shopping-list-search">Search</label>
-  <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="Search">
+    <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="Search">
   <button type="submit">Search</button>
   <label for="shopping-list-checkbox">Show Only Checked</label>
-  <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
+    <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
 }
 function renderListForm() {
   console.log('Rendering list form');
@@ -138,11 +143,11 @@ function renderFilteredShoppingList() {
 
 // User can press a switch/checkbox to toggle between displaying all items or displaying only items that are unchecked
 function handleCheckboxChecked() {
-  $('.js-shopping-list-checkbox').change(function(event) {
+  $('.js-shopping-list-checkbox').change(function (event) {
     console.log('`handleCheckboxChecked` ran');
     if ($(event.currentTarget).is(':checked')) {
       renderFilteredShoppingList();
-    }else {
+    } else {
       renderShoppingList();
     }
   });
@@ -150,11 +155,37 @@ function handleCheckboxChecked() {
 
 // User can type in a search term and the displayed list will be filtered by item names only containing that search term
 function handleSearchTextbox() {
-
+  //$('#js-shopping-list-form').submit(function (event) {
+  // event.preventDefault();
+  // console.log('`handleSearchTextbox` ran');
+  // const newItemName = $('.js-shopping-list-search').val();
+  // $('.js-shopping-list-search').val('');
+  // addItemToShoppingList(newItemName);
+  // renderShoppingList();
+  // });
+}
+// const test = {
+//   items:[{name:1},{name:2},{name:3}]
+// };
+// Function to change the value of name in object
+function changeName(itemIndex, newName) {
+  console.log('name has changed');
+  STORE.items[itemIndex].name = newName;
 }
 // User can edit the title of an item
 function handleItemEdit() {
-
+  $('.js-shopping-list').on('click', '.js-item-edit', function(event) {
+    console.log('`handleItemEdit` ran');
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    const newName = $(`.${itemIndex}`).val();
+    if(newName !== '') {
+      changeName(itemIndex, newName);
+    } else {
+      console.log('empty string edited');
+    }
+    renderShoppingList();
+  });
+  
 }
 
 
@@ -163,6 +194,7 @@ function handleItemEdit() {
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
 function handleShoppingList() {
+  // changeName(1, 'newName');
   renderListForm();
   renderShoppingList();
   handleNewItemSubmit();
