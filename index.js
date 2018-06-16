@@ -9,6 +9,24 @@ const STORE = {
   ]
 };
 
+//new Searchbar for updated funtionality
+function generateListFormHtml() {
+  console.log('Generating list form');
+  return `
+  <label for="shopping-list-entry">Add an item</label>
+    <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+  <button type="submit">Add item</button><br/>
+  <label for="shopping-list-search">Search</label>
+    <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="Search">
+  <button type="submit">Search</button>
+  <label for="shopping-list-checkbox">Show Only Checked</label>
+    <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
+}
+function renderListForm() {
+  console.log('Rendering list form');
+  $('#js-shopping-list-form').html(generateListFormHtml());
+}
+
 function generateItemElement(item, itemIndex) {
   return `
     <li class="js-item-index-element" data-item-index="${itemIndex}">
@@ -85,9 +103,6 @@ function handleItemCheckClicked() {
     renderShoppingList();
   });
 }
-// (optional) Get info from DOM related to user action
-// Change the store
-// Render
 
 //function to actually delete item from array
 
@@ -107,29 +122,11 @@ function handleDeleteItemClicked() {
   });
 
 }
-//new Searchbar for updated funtionality
-function generateListFormHtml() {
-  console.log('Generating list form');
-  return `
-  <label for="shopping-list-entry">Add an item</label>
-    <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
-  <button type="submit">Add item</button><br/>
-  <label for="shopping-list-search">Search</label>
-    <input type="text" name="shopping-list-search" class="js-shopping-list-search" placeholder="Search">
-  <button type="submit">Search</button>
-  <label for="shopping-list-checkbox">Show Only Checked</label>
-    <input type="checkbox" name="shopping-list-checkbox" class="js-shopping-list-checkbox">`;
-}
-function renderListForm() {
-  console.log('Rendering list form');
-  $('#js-shopping-list-form').html(generateListFormHtml());
-}
 
 function generateCheckedList(shoppingList) {
   console.log('Generating filtered shopping list element');
   const filteredItems = shoppingList.filter(item => item.checked);
   const filteredItemsString = generateShoppingItemsString(filteredItems);
-  //console.log(filteredItemsString);
   return filteredItemsString;
 }
 
@@ -152,6 +149,10 @@ function handleCheckboxChecked() {
     }
   });
 }
+// Function to search through STORE.items for something with same .name and return an array to be initalized
+function storeSearch(name) {
+  return STORE.items.filter(itemName => itemName.name.toLowerCase().includes(name.toLowerCase()));
+}
 
 // User can type in a search term and the displayed list will be filtered by item names only containing that search term
 function handleSearchTextbox() {
@@ -164,9 +165,7 @@ function handleSearchTextbox() {
   // renderShoppingList();
   // });
 }
-// const test = {
-//   items:[{name:1},{name:2},{name:3}]
-// };
+
 // Function to change the value of name in object
 function changeName(itemIndex, newName) {
   console.log(`${STORE.items[itemIndex].name} to ${newName}`);
