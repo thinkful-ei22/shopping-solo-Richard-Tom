@@ -169,7 +169,7 @@ function handleSearchTextbox() {
 // };
 // Function to change the value of name in object
 function changeName(itemIndex, newName) {
-  console.log('name has changed');
+  console.log(`${STORE.items[itemIndex].name} to ${newName}`);
   STORE.items[itemIndex].name = newName;
 }
 // User can edit the title of an item
@@ -178,6 +178,7 @@ function handleItemEdit() {
     console.log('`handleItemEdit` ran');
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     const newName = $(`.${itemIndex}`).val();
+    //if empty string is submitted, do nothing
     if(newName !== '') {
       changeName(itemIndex, newName);
     } else {
@@ -194,7 +195,6 @@ function handleItemEdit() {
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
 function handleShoppingList() {
-  // changeName(1, 'newName');
   renderListForm();
   renderShoppingList();
   handleNewItemSubmit();
