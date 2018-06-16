@@ -166,7 +166,9 @@ function renderSearchShoppingList(searchName) {
 function generateSearchList(searchName) {
   console.log(`looking for ${searchName}`);
   const searchList = STORE.items.filter(itemName => itemName.name.toLowerCase().includes(searchName.toLowerCase()));
-  const searchListString = generateShoppingItemsString(searchList);
+  const searchListString = `
+  <h2> Search results for: ${searchName} </h2>
+  ${generateShoppingItemsString(searchList)}`;
   return searchListString;
 }
 // function to turn search array to html
