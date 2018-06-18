@@ -191,19 +191,19 @@ function changeName(itemIndex, newName) {
 }
 // User can edit the title of an item
 function handleItemEdit() {
-  $('.js-shopping-list').on('click', '.js-item-edit', function(event) {
+  $('.js-shopping-list').on('click', '.js-item-edit', function (event) {
     console.log('`handleItemEdit` ran');
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     const newName = $(`.${itemIndex}`).val();
     //if empty string is submitted, do nothing
-    if(newName !== '') {
+    if (newName !== '') {
       changeName(itemIndex, newName);
     } else {
       console.log('empty string edited');
     }
     renderShoppingList();
   });
-  
+
 }
 
 
